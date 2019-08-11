@@ -13,3 +13,6 @@
 [submodule "catkin_ws/src/steering"]
 	path = catkin_ws/src/steering
 	url = git@github.com:project-omicron/steering.git
+[submodule "catkin_ws/src/joy_teleop"]
+	path = catkin_ws/src/joy_teleop
+	url = git@github.com:project-omicron/joy_teleop.git
