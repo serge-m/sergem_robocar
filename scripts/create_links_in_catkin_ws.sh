@@ -7,6 +7,6 @@ fi
 
 
 
-for directory in ../catkin_ws/src/*; do
+for directory in `pwd`/../catkin_ws/src/*; do
   ln -s "${directory}" "${1}"
 done
