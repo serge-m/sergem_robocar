@@ -7,3 +7,6 @@
 [submodule "catkin_ws/src/ai_pilot_keras"]
 	path = catkin_ws/src/ai_pilot_keras
 	url = git@github.com:project-omicron/ai_pilot_keras.git
+[submodule "catkin_ws/src/throttle"]
+	path = catkin_ws/src/throttle
+	url = git@github.com:project-omicron/throttle.git
