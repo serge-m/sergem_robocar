@@ -19,3 +19,6 @@
 [submodule "catkin_ws/src/joystic_drivers"]
 	path = catkin_ws/src/joystic_drivers
 	url = git@github.com:project-omicron/joystick_drivers.git
+[submodule "catkin_ws/src/realsense-ros"]
+	path = catkin_ws/src/realsense-ros
+	url = git@github.com:project-omicron/realsense-ros.git
