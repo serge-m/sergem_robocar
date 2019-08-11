@@ -10,3 +10,6 @@
 [submodule "catkin_ws/src/throttle"]
 	path = catkin_ws/src/throttle
 	url = git@github.com:project-omicron/throttle.git
+[submodule "catkin_ws/src/steering"]
+	path = catkin_ws/src/steering
+	url = git@github.com:project-omicron/steering.git
