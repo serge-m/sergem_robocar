@@ -16,3 +16,6 @@
 [submodule "catkin_ws/src/joy_teleop"]
 	path = catkin_ws/src/joy_teleop
 	url = git@github.com:project-omicron/joy_teleop.git
+[submodule "catkin_ws/src/joystic_drivers"]
+	path = catkin_ws/src/joystic_drivers
+	url = git@github.com:project-omicron/joystick_drivers.git
