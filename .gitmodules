@@ -1,3 +1,6 @@
 [submodule "wiki"]
 	path = wiki
 	url = git@github.com:project-omicron/wiki.git
+[submodule "catkin_ws/src/pca9685"]
+	path = catkin_ws/src/pca9685
+	url = git@github.com:project-omicron/pca9685.git
