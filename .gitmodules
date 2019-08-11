@@ -4,3 +4,6 @@
 [submodule "catkin_ws/src/pca9685"]
 	path = catkin_ws/src/pca9685
 	url = git@github.com:project-omicron/pca9685.git
+[submodule "catkin_ws/src/ai_pilot_keras"]
+	path = catkin_ws/src/ai_pilot_keras
+	url = git@github.com:project-omicron/ai_pilot_keras.git
