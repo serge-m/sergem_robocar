@@ -1,0 +1,5 @@
+<launch>
+    <node name="steering_translator_node" pkg="steering_translator" type="steering_translator_node.py" output="screen"/>
+    <include file="$(find raspicam_node)/launch/camerav2_410x308_30fps.launch" />
+    <node name="serial_node" pkg="pwm_radio_arduino" type="rosserial_python2_bridge.py" args="/dev/ttyUSB0" output="screen" />
+</launch>
