@@ -1,6 +1,12 @@
 # robocar
 Main repository for the robocar
 
+# Architecture
+This is a modified version of the robocar.
+![serge-m robocar architecture](/doc/img/sergem-robocar-diagram.svg)
+
+For further docs see the wiki.
+
 ## Installation on Raspberry Pi with Ubiquity image
 * Download and deploy the ubiquity image on your arspberry
 * sudo apt install -y libatlas-base-dev libhdf5-dev libhdf5-serial-dev libjpeg62
