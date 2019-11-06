@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang=en>
+
+<head>
+    <meta charset=utf-8>
+    <meta name=viewport content="width=device-width, initial-scale=1">
+    <title>Robocar launch console</title>
+</head>
+
+<script src="js/angular.min.js"></script>
+
+<body>
+    <div ng-app="myApp" ng-controller="launcherCtrl">
+        <script src="js/my_controller.js"></script>
+
+        <h1>Robocar launch console</h1>
+        <p>Status: {{ connectionStatus }} </p>
+        
+        <div ng-repeat="nodeName in nodeNames">
+            <button ng-click="startScript(nodeName)">Start {{ nodeName }}</button>
+            <button ng-click="stopScript(nodeName)">Stop {{ nodeName }}</button>
+            <p >launch: {{ nodeStatuses[nodeName] }}</p>
+        </div>
+
+    </div>
+
+
+</body>
+
+</html>
