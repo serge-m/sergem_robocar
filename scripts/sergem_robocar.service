@@ -1,0 +1,15 @@
+[Unit]
+After=roscore.service
+[Service]
+Type=forking
+User=ubuntu
+# Start roscore as a fork and then wait for the tcp port to be opened
+# ----------------------------------------------------------------
+# Source all the environment variables, start roscore in a fork
+# Since the service type is forking, systemd doesn't mark it as
+# 'started' until the original process exits, so we have the 
+# non-forked shell wait until it can connect to the tcp opened by
+# roscore, and then exit, preventing conflicts with dependant services
+ExecStart=/bin/sh -c ". /home/ubuntu/sergem_robocar/catkin_ws/devel/setup.sh; source /home/ubuntu/sergem_robocar/py3/bin/activate; node /home/ubuntu/sergem_robocar/web_ui/index.js"
+[Install]
+WantedBy=multi-user.target
