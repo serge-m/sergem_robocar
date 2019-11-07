@@ -78,7 +78,7 @@ rosrun dynamic_reconfigure dynparam load /raspicam_node camera_settings.yaml
 
 Start recording:
 ```
-rosbag record --duration=180s -o robocar_recording_ /raspicam_node/image/compressed /pwm_radio_arduino/radio_pwm
+rosbag record --split --duration=180s -o robocar_recording_ /raspicam_node/image/compressed /pwm_radio_arduino/radio_pwm
 ```
 
 ## UI for parameters setup
