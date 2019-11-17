@@ -2,9 +2,6 @@
 	path = catkin_ws/src/ai_pilot_keras
 	url = git@github.com:serge-m/omicron_ai_pilot_keras.git
 	branch = development
-[submodule "catkin_ws/src/realsense-ros"]
-	path = catkin_ws/src/realsense-ros
-	url = git@github.com:project-omicron/realsense-ros.git
 [submodule "catkin_ws/src/pwm_radio_arduino"]
 	path = catkin_ws/src/pwm_radio_arduino
 	url = git@github.com:serge-m/pwm_radio_arduino.git
