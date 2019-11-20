@@ -1,0 +1,8 @@
+web_ui/node_modules/**
+.idea/**
+catkin_ws/devel/**
+catkin_ws/build/**
+catkin_ws/install/**
+catkin_ws/.catkin_workspace
+catkin_ws/src/CMakeLists.txt
+py3/*
