@@ -1,0 +1,27 @@
+!!python/object/new:dynamic_reconfigure.encoding.Config
+dictitems:
+  groups: !!python/object/new:dynamic_reconfigure.encoding.Config
+    dictitems:
+      groups: !!python/object/new:dynamic_reconfigure.encoding.Config
+        state: []
+      id: 0
+      name: Default
+      parameters: !!python/object/new:dynamic_reconfigure.encoding.Config
+        state: []
+      parent: 0
+      state: true
+      steering_pwm_center: 1400
+      steering_pwm_left: 1100
+      steering_pwm_right: 1700
+      throttle_pwm_backward: 1250
+      throttle_pwm_forward: 1460
+      throttle_pwm_stop: 1400
+      type: ''
+    state: []
+  steering_pwm_center: 1400
+  steering_pwm_left: 1100
+  steering_pwm_right: 1700
+  throttle_pwm_backward: 1250
+  throttle_pwm_forward: 1460
+  throttle_pwm_stop: 1400
+state: []
