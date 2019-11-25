@@ -54,7 +54,7 @@ var tracked_processes = {
   "dummy_script_failing": makeProcessInfo('python', ['dummy_script_failing.py']),
   "rosbag record": makeProcessInfo(
     "sh", 
-    ["-c", "rosbag record --duration=180s -o robocar_recording_ /raspicam_node/image/compressed /pwm_radio_arduino/radio_pwm"]
+    ["-c", "rosbag record --duration=180s -o bags/robocar_recording_ /raspicam_node/image/compressed /pwm_radio_arduino/radio_pwm"]
   ),
   "roslaunch base": makeProcessInfo('roslaunch', ['/home/ubuntu/sergem_robocar/scripts/robocar_record.launch']),
   "AI driver": makeProcessInfo('rosrun', ['ai_driver_keras', 'ai_driver.py', '/home/ubuntu/sergem_robocar/linear_20191117.model']),
