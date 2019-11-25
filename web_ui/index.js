@@ -2,6 +2,7 @@ const express = require('express');
 const expressWS = require('express-ws');
 const WebSocket = require('ws');
 const path = require('path');
+const fs = require('fs');
 const app = express();
 const appWS = expressWS(app);
 const port = 3000;
@@ -9,11 +10,30 @@ const { spawn } = require('child_process');
 
 const logCommandsOutput = true;
 const numCharsToSave = 500;
+const bagsDir = `${__dirname}/bags/`;
 
 app.get('/', (request, response) => {
   console.log("root endpoint");
   response.send('Hello from Express!');;
 })
+
+
+app.get('/bags/', function(req, res) {
+  const listBags = fs.readdirSync(bagsDir);
+  res.send(listBags);
+});
+
+app.get('/bags/:name', function(req, res){
+  const name = req.params.name;
+  const listBags = fs.readdirSync(bagsDir);
+  if (listBags.includes(name)) {
+    const file = `${__dirname}/bags/${name}`;
+    res.download(file);
+  }
+  else {
+    res.send("Not found");
+  }
+});
 
 app.use('/static', express.static(path.join(__dirname, 'static')))
 
@@ -35,7 +55,14 @@ var tracked_processes = {
   "rosbag record": makeProcessInfo(
     "sh", 
     ["-c", "rosbag record --duration=180s -o robocar_recording_ /raspicam_node/image/compressed /pwm_radio_arduino/radio_pwm"]
-  )
+  ),
+  "roslaunch base": makeProcessInfo('roslaunch', ['/home/ubuntu/sergem_robocar/scripts/robocar_record.launch']),
+  "AI driver": makeProcessInfo('rosrun', ['ai_driver_keras', 'ai_driver.py', '/home/ubuntu/sergem_robocar/linear_20191117.model']),
+  "mode 0": makeProcessInfo('rostopic', ['pub', '/pwm_radio_arduino/mode',  'std_msgs/Int32', '--once', "data: 0"]),
+  "mode 1": makeProcessInfo('rostopic', ['pub', '/pwm_radio_arduino/mode',  'std_msgs/Int32', '--once', "data: 1"]),
+  "mode 2": makeProcessInfo('rostopic', ['pub', '/pwm_radio_arduino/mode',  'std_msgs/Int32', '--once', "data: 2"]),
+  "mode 3": makeProcessInfo('rostopic', ['pub', '/pwm_radio_arduino/mode',  'std_msgs/Int32', '--once', "data: 3"])
+
 };
 
 var socket_clients = [];

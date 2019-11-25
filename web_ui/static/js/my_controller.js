@@ -1,7 +1,7 @@
 angular.module('myApp', []).controller('launcherCtrl', function ($scope) {
     $scope.connectionStatus = "";
 
-    $scope.nodeNames = ["dummy_script", "dummy_script_failing", "rosbag record"]
+    $scope.nodeNames = ["dummy_script", "dummy_script_failing", "rosbag record", "roslaunch base", "AI driver", "mode 0", "mode 1", "mode 2", "mode 3"]
     $scope.nodeStatuses = $scope.nodeNames.map((x) => "unknown");
 
     $scope.getSocketUrl = function () {
