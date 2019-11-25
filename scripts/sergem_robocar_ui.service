@@ -1,0 +1,9 @@
+[Unit]
+After=roscore.service
+[Service]
+#Type=forking
+User=ubuntu
+WorkingDirectory=/home/ubuntu/sergem_robocar/web_ui/
+ExecStart=/bin/sh -c ". /home/ubuntu/sergem_robocar/catkin_ws/devel/setup.sh; PATH=/home/ubuntu/sergem_robocar/py3/bin/:$PATH node index.js"
+[Install]
+WantedBy=multi-user.target
