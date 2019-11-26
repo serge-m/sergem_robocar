@@ -11,17 +11,17 @@ dictitems:
       parent: 0
       state: true
       steering_pwm_center: 1400
-      steering_pwm_left: 1100
-      steering_pwm_right: 1700
+      steering_pwm_left: 925
+      steering_pwm_right: 1829
       throttle_pwm_backward: 1250
-      throttle_pwm_forward: 1460
+      throttle_pwm_forward: 1500
       throttle_pwm_stop: 1400
       type: ''
     state: []
   steering_pwm_center: 1400
-  steering_pwm_left: 1100
-  steering_pwm_right: 1700
+  steering_pwm_left: 925
+  steering_pwm_right: 1829
   throttle_pwm_backward: 1250
-  throttle_pwm_forward: 1460
+  throttle_pwm_forward: 1500
   throttle_pwm_stop: 1400
 state: []
