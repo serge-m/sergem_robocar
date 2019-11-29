@@ -57,7 +57,7 @@ var tracked_processes = {
     ["-c", "rosbag record --split --duration=180s -o bags/robocar_recording_ /raspicam_node/image/compressed /pwm_radio_arduino/radio_pwm"]
   ),
   "roslaunch base": makeProcessInfo('roslaunch', ['/home/ubuntu/sergem_robocar/scripts/robocar_record.launch']),
-  "AI driver": makeProcessInfo('rosrun', ['ai_driver_keras', 'ai_driver.py', '/home/ubuntu/sergem_robocar/linear_20191117.model']),
+  "AI driver": makeProcessInfo('rosrun', ['ai_driver_keras', 'ai_driver.py', '/home/ubuntu/sergem_robocar/current.model']),
   "mode 0": makeProcessInfo('rostopic', ['pub', '/pwm_radio_arduino/mode',  'std_msgs/Int32', '--once', "data: 0"]),
   "mode 1": makeProcessInfo('rostopic', ['pub', '/pwm_radio_arduino/mode',  'std_msgs/Int32', '--once', "data: 1"]),
   "mode 2": makeProcessInfo('rostopic', ['pub', '/pwm_radio_arduino/mode',  'std_msgs/Int32', '--once', "data: 2"]),
