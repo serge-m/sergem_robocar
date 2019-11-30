@@ -85,7 +85,7 @@ setInterval(update_clients, 1000);
 function process_command(msg_json) {
   console.log("Processing ", msg_json);
   if (msg_json.command == "start") {
-    return processes.start(msg_json.name);
+    return processes.start(msg_json.name, msg_json.params);
   }
   if (msg_json.command == "stop") {
     return processes.stop(msg_json.name);

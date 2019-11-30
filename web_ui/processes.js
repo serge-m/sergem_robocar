@@ -30,6 +30,9 @@ function makeProcessInfo(name, command, args) {
       makeProcessInfo("mode 1", 'rostopic', ['pub', '/pwm_radio_arduino/mode', 'std_msgs/Int32', '--once', "data: 1"]),
       makeProcessInfo("mode 2", 'rostopic', ['pub', '/pwm_radio_arduino/mode', 'std_msgs/Int32', '--once', "data: 2"]),
       makeProcessInfo("mode 3", 'rostopic', ['pub', '/pwm_radio_arduino/mode', 'std_msgs/Int32', '--once', "data: 3"]),
+      
+      makeProcessInfo("dynamic_reconfigure", 'rosrun', ['dynamic_reconfigure', 'dynparam', 'set', '/steering_translator_node', "{params}"]),
+    
       makeProcessInfo("shutdown", 'sudo', ['ls']),
       makeProcessInfo("dummy_script", 'python', ['dummy_script.py']),
       makeProcessInfo("dummy_script_failing", 'python', ['dummy_script_failing.py']),
@@ -38,7 +41,11 @@ function makeProcessInfo(name, command, args) {
     .map(pi => [pi.name, pi])
   );
 
-  function start(name) {
+  function replace_templates(strings, params) {
+    return strings.map(str => str.replace("{params}", params));
+  }
+
+  function start(name, params) {
     var process_info = tracked_processes[name];
     if (!process_info) {
       console.error(`process with name ${name} was not found`);
@@ -50,7 +57,7 @@ function makeProcessInfo(name, command, args) {
     }
     console.error("starting process " + name);
     try {
-      var p = spawn(process_info.command, process_info.args, { stdio: ['pipe'] });
+      var p = spawn(process_info.command, replace_templates(process_info.args, params), { stdio: ['pipe'] });
     } catch (error) {
       process_info.output = `failed to launch. ${error}`;
       return;
