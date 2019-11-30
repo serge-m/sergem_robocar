@@ -54,7 +54,7 @@ angular.module('myApp', []).controller('launcherCtrl', function ($scope) {
         websocket.send(JSON.stringify({
             "command": "start",
             "name": nodeName,
-            "params": JSON.stringify({})
+            "params": $scope.launchParams[nodeName] || "{}"
         }));
     };
 

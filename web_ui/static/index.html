@@ -19,9 +19,9 @@
         <div ng-repeat="nodeName in nodeNames">
             <h4>{{ nodeName }}</h4>
             <button ng-click="startScript(nodeName)">Start</button>
-            <textarea>{{ launchParams[nodeName] }}</textarea>
-            
             <button ng-click="stopScript(nodeName)">Stop</button>
+            <textarea style="width: 400px; height: 100px;">{{ launchParams[nodeName] }}</textarea>
+            
             <p>{{ nodeStatuses[nodeName] }}</p>
             
         </div>
