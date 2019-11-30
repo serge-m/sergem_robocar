@@ -6,10 +6,10 @@ const fs = require('fs');
 const app = express();
 const appWS = expressWS(app);
 const port = 3000;
-const { spawn } = require('child_process');
 
-const logCommandsOutput = true;
-const numCharsToSave = 500;
+const processes = require('./processes.js');
+
+
 const bagsDir = `${__dirname}/bags/`;
 
 app.get('/', (request, response) => {
@@ -37,53 +37,35 @@ app.get('/bags/:name', function (req, res) {
 
 app.use('/static', express.static(path.join(__dirname, 'static')))
 
-function makeProcessInfo(command, args) {
-  return {
-    "command": command,
-    "args": args,
 
-    "process": null,
-    "output": "",
-    "update_function": null,
-    "return_code": null
-  };
-}
-
-var tracked_processes = {
-  "dummy_script": makeProcessInfo('python', ['dummy_script.py']),
-  "dummy_script_failing": makeProcessInfo('python', ['dummy_script_failing.py']),
-  "rosbag record": makeProcessInfo(
-    "sh",
-    ["-c", "rosbag record --split --duration=180s -o bags/robocar_recording_ /raspicam_node/image/compressed /pwm_radio_arduino/radio_pwm"]
-  ),
-  "roslaunch base": makeProcessInfo('roslaunch', ['/home/ubuntu/sergem_robocar/scripts/robocar_record.launch']),
-  "AI driver": makeProcessInfo('rosrun', ['ai_driver_keras', 'ai_driver.py', '/home/ubuntu/sergem_robocar/current.model']),
-  "mode 0": makeProcessInfo('rostopic', ['pub', '/pwm_radio_arduino/mode', 'std_msgs/Int32', '--once', "data: 0"]),
-  "mode 1": makeProcessInfo('rostopic', ['pub', '/pwm_radio_arduino/mode', 'std_msgs/Int32', '--once', "data: 1"]),
-  "mode 2": makeProcessInfo('rostopic', ['pub', '/pwm_radio_arduino/mode', 'std_msgs/Int32', '--once', "data: 2"]),
-  "mode 3": makeProcessInfo('rostopic', ['pub', '/pwm_radio_arduino/mode', 'std_msgs/Int32', '--once', "data: 3"])
-
-};
 
 var socket_clients = [];
 
-function prepare_status_update() {
-  all_updates = [];
-  for (var name in tracked_processes) {
-    var process_info = tracked_processes[name];
-    var data_to_send = {
-      "command": "update_status",
-      "name": name,
-      "status": "off",
-      "data": process_info.output,
-      "return_code": process_info.return_code
-    };
-    if (process_info.process) {
-      data_to_send.status = "running";
-    }
-    all_updates.push(JSON.stringify(data_to_send));
+function commandUpdate(process_info) {
+  var command = {
+    "command": "update_status",
+    "name": process_info.name,
+    "status": "off",
+    "data": process_info.output,
+    "return_code": process_info.return_code
+  };
+  if (process_info.process) {
+    command.status = "running";
   }
-  return all_updates;
+  return command;
+}
+
+function commandListCommands() {
+  return {
+    "command": "update_command_list",
+    "names": Array.from(Object.keys(processes.tracked_processes))
+  };
+}
+
+function prepare_status_update() {
+  return Object.values(processes.tracked_processes).map(process_info => 
+    JSON.stringify(commandUpdate(process_info))
+    );
 }
 
 function update_clients() {
@@ -92,71 +74,21 @@ function update_clients() {
     if (ws.readyState !== WebSocket.OPEN) {
       return;
     }
-    all_updates.forEach(
-      (data_to_send) => { ws.send(data_to_send); }
-    );
+    all_updates.forEach(data => ws.send(data));
   });
 }
 
 setInterval(update_clients, 1000);
 
-function process_start(name) {
-  var process_info = tracked_processes[name];
-  if (process_info.process) {
-    console.error("process " + name + " is already running");
-    return;
-  }
-  console.error("starting process " + name);
-  try {
-    var p = spawn(process_info.command, process_info.args, { stdio: ['pipe'] });
-  } catch (error) {
-    process_info.output = `failed to launch. ${error}`;
-    return;
-  }
 
-  function processOutput(data) {
-    if (logCommandsOutput) {
-      console.debug(name + ": " + data.toString().replace("\n", "\\n"));
-    }
-    process_info.output = (process_info.output + data.toString()).slice(-numCharsToSave);
-  };
-  p.stdout.on('data', processOutput);
-  p.stderr.on('data', processOutput);
-
-  p.on('close', (code) => {
-    console.log(`process ${process_info.command} ${process_info.args} exited with code ${code}`);
-    process_info.return_code = code;
-    process_info.process = null;
-  });
-  p.on('error', (err) => {
-    console.log(`process ${process_info.command} ${process_info.args} resulted in error ${err}`);
-    process_info.return_code = null;
-    process_info.output = `${err}`;
-  });
-
-
-  process_info.process = p;
-  process_info.return_code = null;
-}
-
-function process_stop(name) {
-  var process_info = tracked_processes[name];
-  if (!process_info.process) {
-    console.error("process " + name + " is not running");
-    return;
-  }
-  console.error("stopping process " + name);
-  process_info.process.kill();
-  process_info.process = null;
-}
 
 function process_command(msg_json) {
   console.log("Processing ", msg_json);
   if (msg_json.command == "start") {
-    return process_start(msg_json.name);
+    return processes.start(msg_json.name);
   }
   if (msg_json.command == "stop") {
-    return process_stop(msg_json.name);
+    return processes.stop(msg_json.name);
   }
 }
 
@@ -180,6 +112,9 @@ app.ws('/', (ws, req) => {
 
   socket_clients.push(ws);
   console.info("Client connected. num clients: ", socket_clients.length);
+  const commandListCmd = JSON.stringify(commandListCommands());
+  console.info(`Sendind list of commands: ${commandListCmd}`);
+  ws.send(commandListCmd);
 });
 
 
@@ -193,8 +128,8 @@ app.listen(port, (err) => {
 
 process.on('SIGINT', function () {
   console.log("terminating...")
-  for (var name in tracked_processes) {
-    process_stop(name);
+  for (var name in processes.tracked_processes) {
+    processes.stop(name);
   }
   update_clients();
   process.exit();

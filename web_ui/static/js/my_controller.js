@@ -1,8 +1,8 @@
 angular.module('myApp', []).controller('launcherCtrl', function ($scope) {
     $scope.connectionStatus = "";
 
-    $scope.nodeNames = ["dummy_script", "dummy_script_failing", "rosbag record", "roslaunch base", "AI driver", "mode 0", "mode 1", "mode 2", "mode 3"]
-    $scope.nodeStatuses = $scope.nodeNames.map((x) => "unknown");
+    $scope.nodeNames = ["dummy_script"]
+    $scope.nodeStatuses = {};
 
     $scope.getSocketUrl = function () {
         return 'ws://' + window.location.host + '/';
@@ -29,6 +29,7 @@ angular.module('myApp', []).controller('launcherCtrl', function ($scope) {
     };
 
     websocket.onmessage = function (evt) {
+        console.log(evt);
         var msg_json = JSON.parse(evt.data);
 
         $scope.$apply(function () {
@@ -37,6 +38,10 @@ angular.module('myApp', []).controller('launcherCtrl', function ($scope) {
                     "status: " + msg_json.status +
                     ", return_code: " + msg_json.return_code +
                     ", output: " + msg_json.data;
+            }
+            else if (msg_json.command == "update_command_list") {
+                console.info("got command", msg_json);
+                $scope.nodeNames = msg_json.names;
             }
         });
     };
