@@ -33,7 +33,7 @@ function makeProcessInfo(name, command, args) {
       
       makeProcessInfo("dynamic_reconfigure", 'rosrun', ['dynamic_reconfigure', 'dynparam', 'set', '/steering_translator_node', "{params}"]),
     
-      makeProcessInfo("shutdown", 'sudo', ['ls']),
+      makeProcessInfo("shutdown", 'sudo', ['poweroff']),
       makeProcessInfo("dummy_script", 'python', ['dummy_script.py']),
       makeProcessInfo("dummy_script_failing", 'python', ['dummy_script_failing.py']),
       
