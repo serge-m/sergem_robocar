@@ -22,7 +22,7 @@ function makeProcessInfo(name, command, args) {
       makeProcessInfo(
         "rosbag record",
         "sh",
-        ["-c", "rosbag record --split --duration=180s -o bags/robocar_recording_ /raspicam_node/image/compressed /pwm_radio_arduino/radio_pwm"]
+        ["-c", "rosbag record --split --duration=60s -o bags/robocar_recording_ /raspicam_node/image/compressed /pwm_radio_arduino/radio_pwm"]
       ),
       makeProcessInfo("roslaunch base", 'roslaunch', ['/home/ubuntu/sergem_robocar/scripts/robocar_record.launch']),
       makeProcessInfo("AI driver", 'rosrun', ['ai_driver_keras', 'ai_driver.py', '/home/ubuntu/sergem_robocar/current.model']),
