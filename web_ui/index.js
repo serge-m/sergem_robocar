@@ -18,12 +18,12 @@ app.get('/', (request, response) => {
 })
 
 
-app.get('/bags/', function(req, res) {
+app.get('/bags/', function (req, res) {
   const listBags = fs.readdirSync(bagsDir);
   res.send(listBags);
 });
 
-app.get('/bags/:name', function(req, res){
+app.get('/bags/:name', function (req, res) {
   const name = req.params.name;
   const listBags = fs.readdirSync(bagsDir);
   if (listBags.includes(name)) {
@@ -41,7 +41,7 @@ function makeProcessInfo(command, args) {
   return {
     "command": command,
     "args": args,
-    
+
     "process": null,
     "output": "",
     "update_function": null,
@@ -53,15 +53,15 @@ var tracked_processes = {
   "dummy_script": makeProcessInfo('python', ['dummy_script.py']),
   "dummy_script_failing": makeProcessInfo('python', ['dummy_script_failing.py']),
   "rosbag record": makeProcessInfo(
-    "sh", 
+    "sh",
     ["-c", "rosbag record --split --duration=180s -o bags/robocar_recording_ /raspicam_node/image/compressed /pwm_radio_arduino/radio_pwm"]
   ),
   "roslaunch base": makeProcessInfo('roslaunch', ['/home/ubuntu/sergem_robocar/scripts/robocar_record.launch']),
   "AI driver": makeProcessInfo('rosrun', ['ai_driver_keras', 'ai_driver.py', '/home/ubuntu/sergem_robocar/current.model']),
-  "mode 0": makeProcessInfo('rostopic', ['pub', '/pwm_radio_arduino/mode',  'std_msgs/Int32', '--once', "data: 0"]),
-  "mode 1": makeProcessInfo('rostopic', ['pub', '/pwm_radio_arduino/mode',  'std_msgs/Int32', '--once', "data: 1"]),
-  "mode 2": makeProcessInfo('rostopic', ['pub', '/pwm_radio_arduino/mode',  'std_msgs/Int32', '--once', "data: 2"]),
-  "mode 3": makeProcessInfo('rostopic', ['pub', '/pwm_radio_arduino/mode',  'std_msgs/Int32', '--once', "data: 3"])
+  "mode 0": makeProcessInfo('rostopic', ['pub', '/pwm_radio_arduino/mode', 'std_msgs/Int32', '--once', "data: 0"]),
+  "mode 1": makeProcessInfo('rostopic', ['pub', '/pwm_radio_arduino/mode', 'std_msgs/Int32', '--once', "data: 1"]),
+  "mode 2": makeProcessInfo('rostopic', ['pub', '/pwm_radio_arduino/mode', 'std_msgs/Int32', '--once', "data: 2"]),
+  "mode 3": makeProcessInfo('rostopic', ['pub', '/pwm_radio_arduino/mode', 'std_msgs/Int32', '--once', "data: 3"])
 
 };
 
@@ -94,7 +94,7 @@ function update_clients() {
     }
     all_updates.forEach(
       (data_to_send) => { ws.send(data_to_send); }
-    );   
+    );
   });
 }
 
@@ -102,52 +102,52 @@ setInterval(update_clients, 1000);
 
 function process_start(name) {
   var process_info = tracked_processes[name];
-    if (process_info.process) {
-      console.error("process " + name + " is already running");
-      return;
+  if (process_info.process) {
+    console.error("process " + name + " is already running");
+    return;
+  }
+  console.error("starting process " + name);
+  try {
+    var p = spawn(process_info.command, process_info.args, { stdio: ['pipe'] });
+  } catch (error) {
+    process_info.output = `failed to launch. ${error}`;
+    return;
+  }
+
+  function processOutput(data) {
+    if (logCommandsOutput) {
+      console.debug(name + ": " + data.toString().replace("\n", "\\n"));
     }
-    console.error("starting process " + name);
-    try {
-      var p = spawn(process_info.command, process_info.args, { stdio: ['pipe'] });
-    } catch (error) {
-      process_info.output = `failed to launch. ${error}`;
-      return;
-    }
-    
-    function processOutput(data) {
-      if (logCommandsOutput) {
-        console.debug(name + ": " + data.toString().replace("\n", "\\n"));
-      }
-      process_info.output = (process_info.output + data.toString()).slice(-numCharsToSave);
-    };
-    p.stdout.on('data', processOutput);
-    p.stderr.on('data', processOutput);
+    process_info.output = (process_info.output + data.toString()).slice(-numCharsToSave);
+  };
+  p.stdout.on('data', processOutput);
+  p.stderr.on('data', processOutput);
 
-    p.on('close', (code) => {
-      console.log(`process ${process_info.command} ${process_info.args} exited with code ${code}`);
-      process_info.return_code = code;
-      process_info.process = null;
-    });
-    p.on('error', (err) => {
-      console.log(`process ${process_info.command} ${process_info.args} resulted in error ${err}`);
-      process_info.return_code = null;
-      process_info.output = `${err}`;
-    });
-
-
-    process_info.process = p;
+  p.on('close', (code) => {
+    console.log(`process ${process_info.command} ${process_info.args} exited with code ${code}`);
+    process_info.return_code = code;
+    process_info.process = null;
+  });
+  p.on('error', (err) => {
+    console.log(`process ${process_info.command} ${process_info.args} resulted in error ${err}`);
     process_info.return_code = null;
+    process_info.output = `${err}`;
+  });
+
+
+  process_info.process = p;
+  process_info.return_code = null;
 }
 
 function process_stop(name) {
   var process_info = tracked_processes[name];
-    if (!process_info.process) {
-      console.error("process " + name + " is not running");
-      return;
-    }
-    console.error("stopping process " + name);
-    process_info.process.kill();
-    process_info.process = null;
+  if (!process_info.process) {
+    console.error("process " + name + " is not running");
+    return;
+  }
+  console.error("stopping process " + name);
+  process_info.process.kill();
+  process_info.process = null;
 }
 
 function process_command(msg_json) {
