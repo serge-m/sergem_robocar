@@ -3,4 +3,6 @@
     <node name="ai_driver_keras" pkg="ai_driver_keras" type="ai_driver.py" args="/home/ubuntu/sergem_robocar/linear_first_try.model" output="screen"/>
     <include file="$(find raspicam_node)/launch/camerav2_410x308_30fps.launch" />
     <node name="serial_node" pkg="pwm_radio_arduino" type="rosserial_python2_bridge.py" args="/dev/ttyUSB0" output="screen" />
+    <node name="dynamic_reconfigure_load_camera" pkg="robocar_config" type="dynparam" args="load /raspicam_node $(find robocar_config)/camera_settings.yaml" />
+    <node name="dynamic_reconfigure_load_translator" pkg="robocar_config" type="dynparam" args="load /steering_translator_node $(find robocar_config)/steering_translator.yaml" />
 </launch>
