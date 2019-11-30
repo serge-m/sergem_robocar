@@ -55,9 +55,10 @@ function makeProcessInfo(name, command, args) {
       console.error("process " + name + " is already running");
       return;
     }
-    console.error("starting process " + name);
+    const args = replace_templates(process_info.args, params);
+    console.error(`starting process ${name}: command ${process_info.command} args ${args}` );
     try {
-      var p = spawn(process_info.command, replace_templates(process_info.args, params), { stdio: ['pipe'] });
+      var p = spawn(process_info.command, args, { stdio: ['pipe'] });
     } catch (error) {
       process_info.output = `failed to launch. ${error}`;
       return;
@@ -74,12 +75,12 @@ function makeProcessInfo(name, command, args) {
     p.stderr.on('data', processOutput);
   
     p.on('close', (code) => {
-      console.log(`process ${process_info.command} ${process_info.args} exited with code ${code}`);
+      console.log(`process ${process_info.name} exited with code ${code}`);
       process_info.return_code = code;
       process_info.process = null;
     });
     p.on('error', (err) => {
-      console.log(`process ${process_info.command} ${process_info.args} resulted in error ${err}`);
+      console.log(`process ${process_info.name} resulted in error ${err}`);
       process_info.return_code = null;
       process_info.output = `${err}`;
     });

@@ -32,7 +32,6 @@ angular.module('myApp', []).controller('launcherCtrl', function ($scope) {
     };
 
     websocket.onmessage = function (evt) {
-        console.log(evt);
         var msg_json = JSON.parse(evt.data);
 
         $scope.$apply(function () {

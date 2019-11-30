@@ -20,7 +20,7 @@
             <h4>{{ nodeName }}</h4>
             <button ng-click="startScript(nodeName)">Start</button>
             <button ng-click="stopScript(nodeName)">Stop</button>
-            <textarea style="width: 400px; height: 100px;">{{ launchParams[nodeName] }}</textarea>
+            <textarea style="width: 400px; height: 100px;" ng-model="launchParams[nodeName]"></textarea>
             
             <p>{{ nodeStatuses[nodeName] }}</p>
             
