@@ -6,6 +6,12 @@ Robocar is an attempt to replicate [donkeycar](https://www.donkeycar.com/) proje
 
 [project-omicron](https://github.com/project-omicron/robocar) was used as a base. See `thirdparty` directory for the thirdparty and licence information.
 
+### Video
+
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=xK2RTwvaCCo
+" target="_blank"><img src="http://img.youtube.com/vi/xK2RTwvaCCo/0.jpg"
+alt="Video: Robocar driving autonomously" width="240" height="180" border="10" /></a>
+
 
 
 # Getting started
