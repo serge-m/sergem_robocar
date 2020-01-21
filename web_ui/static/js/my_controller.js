@@ -4,7 +4,7 @@ angular.module('myApp', []).controller('launcherCtrl', function ($scope) {
     $scope.nodeNames = ["dummy_script"]
     $scope.nodeStatuses = {};
     $scope.launchParams = {
-        "dynamic_reconfigure": "{'steering_pwm_left': 1100, 'steering_pwm_center': 1400, 'steering_pwm_right': 1700, 'throttle_pwm_forward': 1500, 'throttle_pwm_stop': 1400, 'throttle_pwm_backward': 1250}"
+        "dynamic_reconfigure": "{'steering_pwm_left': 1150, 'steering_pwm_center': 1400, 'steering_pwm_right': 1650, 'throttle_pwm_forward': 1490, 'throttle_pwm_stop': 1400, 'throttle_pwm_backward': 1250}"
     };
 
     $scope.getSocketUrl = function () {

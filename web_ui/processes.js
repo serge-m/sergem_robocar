@@ -24,8 +24,8 @@ function makeProcessInfo(name, command, args) {
         "sh",
         ["-c", "rosbag record --split --duration=60s -o bags/robocar_recording_ /raspicam_node/image/compressed /pwm_radio_arduino/radio_pwm"]
       ),
-      makeProcessInfo("roslaunch base", 'roslaunch', ['/home/ubuntu/sergem_robocar/scripts/robocar_record.launch']),
-      makeProcessInfo("AI driver", 'rosrun', ['ai_driver_keras', 'ai_driver.py', '/home/ubuntu/sergem_robocar/current.model']),
+      makeProcessInfo("roslaunch base", 'roslaunch', ['../scripts/robocar_record.launch']),
+      makeProcessInfo("AI driver", 'roslaunch', ['../catkin_ws/src/ai_pilot_keras/launch/ai_pilot_keras.launch']),
       makeProcessInfo("mode 0", 'rostopic', ['pub', '/pwm_radio_arduino/mode', 'std_msgs/Int32', '--once', "data: 0"]),
       makeProcessInfo("mode 1", 'rostopic', ['pub', '/pwm_radio_arduino/mode', 'std_msgs/Int32', '--once', "data: 1"]),
       makeProcessInfo("mode 2", 'rostopic', ['pub', '/pwm_radio_arduino/mode', 'std_msgs/Int32', '--once', "data: 2"]),
